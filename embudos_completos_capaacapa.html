@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Embudos Completos Capa a Capa — JF Solution</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #2D6A4F;
+    --verde-medio: #52B788;
+    --verde-claro: #D8F3DC;
+    --verde-palido: #F0FAF3;
+    --amarillo: #F9C74F;
+    --amarillo-claro: #FFF9DB;
+    --crema: #FDFAF5;
+    --gris-oscuro: #1A1A2E;
+    --gris-medio: #5C6370;
+    --gris-claro: #F5F5F0;
+    --blanco: #FFFFFF;
+    --sombra: 0 4px 24px rgba(45,106,79,0.08);
+    --sombra-hover: 0 8px 40px rgba(45,106,79,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--crema);
+    color: var(--gris-oscuro);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--verde) 0%, #1B5E3F 100%);
+    color: var(--blanco);
+    padding: 60px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 20%, rgba(82,183,136,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero > * { position: relative; z-index: 2; }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--amarillo); }
+  .hero-sub {
+    font-size: 16px;
+    opacity: 0.85;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 60px 24px; }
+  section:nth-child(odd) { background: var(--blanco); }
+  section:nth-child(even) { background: var(--gris-claro); }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--verde-medio);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 44px);
+    font-weight: 700;
+    color: var(--gris-oscuro);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .section-desc {
+    font-size: 15px;
+    color: var(--gris-medio);
+    max-width: 640px;
+    margin-bottom: 40px;
+    line-height: 1.75;
+  }
+
+  /* TABS */
+  .tab-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--gris-claro);
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gris-medio);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .tab-btn::after {
+    content: '';
+    position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 3px;
+    background: var(--verde);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--verde);
+  }
+  .tab-btn.active::after {
+    transform: scaleX(1);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* EMBUDO VISUAL */
+  .embudo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .embudo-stage {
+    background: var(--blanco);
+    border-left: 5px solid var(--verde);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: var(--sombra);
+  }
+  .embudo-stage.tofu { border-left-color: #FF6B6B; }
+  .embudo-stage.mofu { border-left-color: #4ECDC4; }
+  .embudo-stage.bofu { border-left-color: var(--verde); }
+
+  .stage-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--verde-medio);
+    margin-bottom: 6px;
+  }
+  .stage-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gris-oscuro);
+    margin-bottom: 10px;
+  }
+  .stage-desc {
+    font-size: 14px;
+    color: var(--gris-medio);
+    line-height: 1.6;
+  }
+
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .card {
+    background: var(--blanco);
+    border: 1px solid #E8EDE9;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--sombra);
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-hover);
+  }
+  .card-tag {
+    display: inline-block;
+    background: var(--verde-claro);
+    color: var(--verde);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gris-oscuro);
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: 14px;
+    color: var(--gris-medio);
+    line-height: 1.6;
+  }
+
+  /* ACCORDION */
+  .accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+  .accordion-item {
+    background: var(--blanco);
+    border: 1px solid #E8EDE9;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+  }
+  .accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--verde-palido);
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+    color: var(--gris-oscuro);
+    transition: background 0.2s;
+  }
+  .accordion-header:hover { background: var(--verde-claro); }
+  .accordion-header::after {
+    content: '▼';
+    display: inline-block;
+    transition: transform 0.2s;
+    color: var(--verde-medio);
+  }
+  .accordion-item.open .accordion-header::after { transform: rotate(-180deg); }
+  .accordion-body {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .accordion-item.open .accordion-body {
+    max-height: 1500px;
+    padding: 20px;
+  }
+  .accordion-body-content {
+    font-size: 14px;
+    color: var(--gris-medio);
+    line-height: 1.7;
+  }
+
+  /* TABLA */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 30px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th {
+    background: var(--verde);
+    color: var(--blanco);
+    padding: 12px;
+    text-align: left;
+    font-weight: 700;
+  }
+  td {
+    padding: 12px;
+    border-bottom: 1px solid #E8EDE9;
+  }
+  tr:nth-child(even) td { background: var(--verde-palido); }
+
+  /* CHECKLIST */
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--gris-medio);
+  }
+  .checklist li::before {
+    content: '✓';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: var(--verde);
+    color: var(--blanco);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ALERT */
+  .alert {
+    background: var(--amarillo-claro);
+    border-left: 4px solid var(--amarillo);
+    border-radius: 6px;
+    padding: 16px;
+    margin: 24px 0;
+    font-size: 14px;
+    color: var(--gris-oscuro);
+    line-height: 1.6;
+  }
+
+  footer {
+    background: var(--gris-oscuro);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 40px 24px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    section { padding: 40px 20px; }
+    .tab-btn { padding: 10px 14px; font-size: 14px; }
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <h1>Embudos Completos<br><span>Capa a Capa</span></h1>
+  <p class="hero-sub">Orgánico + ADS $250k/mes — Estructura integrada de content-strategy, social-content y ad-creative</p>
+</header>
+
+<!-- DATOS BASE -->
+<section>
+  <div class="container">
+    <p class="section-label">Contexto</p>
+    <h2 class="section-title">Capa a Capa — Datos Actuales</h2>
+    <p class="section-desc">Estos números son la base de ambos embudos (orgánico y pagado). Se actualizarán mensualmente con datos de Instagram Insights.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div style="font-size: 24px; font-weight: 700; color: var(--verde); margin-bottom: 8px;">7</div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--verde-medio); text-transform: uppercase; letter-spacing: 1px;">Helados/día (Hoy)</div>
+        <div style="font-size: 13px; color: var(--gris-medio); margin-top: 6px;">Meta: 23 helados/día en 30 días</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 24px; font-weight: 700; color: var(--verde); margin-bottom: 8px;">422</div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--verde-medio); text-transform: uppercase; letter-spacing: 1px;">Seguidores IG</div>
+        <div style="font-size: 13px; color: var(--gris-medio); margin-top: 6px;">Meta: 5.000 seguidores en julio</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 24px; font-weight: 700; color: var(--verde); margin-bottom: 8px;">2.2K</div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--verde-medio); text-transform: uppercase; letter-spacing: 1px;">Views/Reel</div>
+        <div style="font-size: 13px; color: var(--gris-medio); margin-top: 6px;">Promedio primeras 2 semanas</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 24px; font-weight: 700; color: var(--verde); margin-bottom: 8px;">$250k</div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--verde-medio); text-transform: uppercase; letter-spacing: 1px;">Presupuesto ADS</div>
+        <div style="font-size: 13px; color: var(--gris-medio); margin-top: 6px;">Distribuido en 3 campañas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMBUDOS PRINCIPALES -->
+<section>
+  <div class="container">
+    <p class="section-label">Estructura</p>
+    <h2 class="section-title">Dos embudos que se retroalimentan</h2>
+    <p class="section-desc">El orgánico construye audiencia y confianza. El pagado acelera la conversión. Ambos juntos generan el crecimiento exponencial.</p>
+
+    <div class="tab-container">
+      <button class="tab-btn active" data-tab="organico">Embudo Orgánico</button>
+      <button class="tab-btn" data-tab="pagado">Embudo ADS $250k</button>
+      <button class="tab-btn" data-tab="integracion">Integración</button>
+    </div>
+
+    <!-- TAB 1: ORGÁNICO -->
+    <div id="organico" class="tab-content active">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 24px; color: var(--gris-oscuro);">Embudo Orgánico — Instagram</h3>
+      
+      <div class="embudo-grid">
+        <div class="embudo-stage tofu">
+          <div class="stage-label">TOFU — Awareness</div>
+          <div class="stage-title">Descubrimiento</div>
+          <div class="stage-desc">Personas nuevas en Bucaramanga que buscan helado fit o sin azúcar.</div>
+          <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--gris-medio);">📊 KPI: Alcance + Seguidores</div>
+        </div>
+
+        <div class="embudo-stage mofu">
+          <div class="stage-label">MOFU — Consideración</div>
+          <div class="stage-title">Confianza</div>
+          <div class="stage-desc">Seguidores que ven contenido y entienden la propuesta pero aún no visitaron.</div>
+          <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--gris-medio);">📊 KPI: Engagement + Saves</div>
+        </div>
+
+        <div class="embudo-stage bofu">
+          <div class="stage-label">BOFU — Conversión</div>
+          <div class="stage-title">Visita al local</div>
+          <div class="stage-desc">Contenido directo que impulsa la visita física: ubicación, horario, CTA claro.</div>
+          <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--gris-medio);">📊 KPI: DMs + Visitas</div>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">Los 5 Pilares de Contenido</h3>
+
+      <div class="card-grid">
+        <div class="card">
+          <span class="card-tag">30% del contenido</span>
+          <h4>1. Educación Saludable</h4>
+          <p><strong>Temas:</strong> Por qué el azúcar es malo, qué comer post-gym, nutrición fit.</p>
+          <p style="margin-top: 10px; color: var(--verde); font-size: 13px;"><strong>Formato:</strong> Reels educativos, carruseles</p>
+        </div>
+
+        <div class="card">
+          <span class="card-tag">25% del contenido</span>
+          <h4>2. Historia y Detrás de Cámaras</h4>
+          <p><strong>Temas:</strong> Por qué nació Capa a Capa, proceso artesanal, día a día.</p>
+          <p style="margin-top: 10px; color: var(--verde); font-size: 13px;"><strong>Formato:</strong> Reels storytelling, historias</p>
+        </div>
+
+        <div class="card">
+          <span class="card-tag">25% del contenido</span>
+          <h4>3. Producto y Personalización</h4>
+          <p><strong>Temas:</strong> Menú completo, combinaciones, nuevos sabores, proceso.</p>
+          <p style="margin-top: 10px; color: var(--verde); font-size: 13px;"><strong>Formato:</strong> Carruseles, Reels estéticos</p>
+        </div>
+
+        <div class="card">
+          <span class="card-tag">15% del contenido</span>
+          <h4>4. Testimonios y Comunidad</h4>
+          <p><strong>Temas:</strong> Clientes satisfechos, restricción médica, reacciones reales.</p>
+          <p style="margin-top: 10px; color: var(--verde); font-size: 13px;"><strong>Formato:</strong> Videos testimonios, reposts</p>
+        </div>
+
+        <div class="card">
+          <span class="card-tag">5% del contenido</span>
+          <h4>5. Conversión Directa</h4>
+          <p><strong>Temas:</strong> Ubicación, horario, oferta especial, referidos.</p>
+          <p style="margin-top: 10px; color: var(--verde); font-size: 13px;"><strong>Formato:</strong> Historias + Posts BOFU</p>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">Frecuencia Recomendada (Semanal)</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Formato</th>
+              <th>Frecuencia</th>
+              <th>Etapa</th>
+              <th>Objetivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Reels (15-30s)</strong></td>
+              <td>2-3 x semana</td>
+              <td>TOFU</td>
+              <td>Alcance, seguidores nuevos</td>
+            </tr>
+            <tr>
+              <td><strong>Carruseles</strong></td>
+              <td>1-2 x semana</td>
+              <td>MOFU</td>
+              <td>Engagement, saves</td>
+            </tr>
+            <tr>
+              <td><strong>Historias</strong></td>
+              <td>1-3 x día</td>
+              <td>BOFU</td>
+              <td>Tráfico directo al local</td>
+            </tr>
+            <tr>
+              <td><strong>TikTok (repost)</strong></td>
+              <td>3-4 x semana</td>
+              <td>TOFU</td>
+              <td>Alcance masivo, jóvenes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">Hooks por Etapa del Embudo</h3>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-header">🎣 TOFU Hook: "Lo que nadie te dice"</div>
+          <div class="accordion-body">
+            <div class="accordion-body-content">
+              <p><strong>Fórmula:</strong> Información impactante que desafía creencias comunes</p>
+              <p style="margin-top: 10px;"><strong>Ejemplos:</strong></p>
+              <ul class="checklist" style="margin-top: 8px;">
+                <li>"Lo que nadie te dice sobre el azúcar en los helados que comes todos los días"</li>
+                <li>"3 cosas que ninguna heladería normal te va a contar"</li>
+                <li>"Dejé de comer azúcar porque mi cuerpo no la procesa. Por eso creé esto."</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">🎣 MOFU Hook: "¿Qué pasaría si...?"</div>
+          <div class="accordion-body">
+            <div class="accordion-body-content">
+              <p><strong>Fórmula:</strong> Pregunta que genera curiosidad + contradicción</p>
+              <p style="margin-top: 10px;"><strong>Ejemplos:</strong></p>
+              <ul class="checklist" style="margin-top: 8px;">
+                <li>"¿Y si te digo que puedes comer helado sin culpa DESPUÉS del gym?"</li>
+                <li>"¿Qué pasaría si tu heladería favorita fuera 100% sin azúcar?"</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">🎣 BOFU Hook: "Hoy es el día"</div>
+          <div class="accordion-body">
+            <div class="accordion-body-content">
+              <p><strong>Fórmula:</strong> CTA directo con urgencia suave + ubicación</p>
+              <p style="margin-top: 10px;"><strong>Ejemplos:</strong></p>
+              <ul class="checklist" style="margin-top: 8px;">
+                <li>"Hoy estamos abiertos en Cabecera del Llano. Cra 36 #48-26. Te esperamos hasta las 7pm"</li>
+                <li>"¿Ya nos visitaste? Menciona Instagram cuando llegues y te sorprendemos"</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">Sesión de Batching (Producción Semanal)</h3>
+
+      <div class="alert">
+        <strong>⏱️ Tiempo recomendado:</strong> 2-3 horas una vez por semana (lunes o martes)
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4>20 min: Planificación</h4>
+          <p>Definir los 5 temas de la semana según los pilares. Decidir qué ángulo usar.</p>
+        </div>
+
+        <div class="card">
+          <h4>30 min: Grabación</h4>
+          <p>Grabar 2-3 Reels + fotos del producto. Siempre en lotes, nunca de a uno.</p>
+        </div>
+
+        <div class="card">
+          <h4>30 min: Edición</h4>
+          <p>Editar Reels, montar carruseles, escribir captions con CTAs claros.</p>
+        </div>
+
+        <div class="card">
+          <h4>15 min: Programación</h4>
+          <p>Programa los posts en los horarios óptimos (6am, 12m, 4pm, 7pm).</p>
+        </div>
+
+        <div class="card">
+          <h4>15 min: Análisis</h4>
+          <p>Revisa métricas de la semana anterior: qué funcionó, qué no.</p>
+        </div>
+
+        <div class="card">
+          <h4>Continuo: Engagement (30 min)</h4>
+          <p>Responder comentarios en 2 horas. Interactuar con 5-10 perfiles del nicho.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: PAGADO -->
+    <div id="pagado" class="tab-content hidden">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 24px; color: var(--gris-oscuro);">Embudo ADS — $250.000/mes</h3>
+
+      <div class="embudo-grid">
+        <div class="embudo-stage tofu">
+          <div class="stage-label">AWARENESS</div>
+          <div class="stage-title">Campaña 1</div>
+          <div class="stage-desc">Personas nuevas en Bucaramanga que buscan helado o fitness.</div>
+          <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--gris-medio);">💰 $100k presupuesto</div>
+        </div>
+
+        <div class="embudo-stage mofu">
+          <div class="stage-label">CONVERSIÓN</div>
+          <div class="stage-title">Campaña 2</div>
+          <div class="stage-desc">Retargeting a personas que visitaron el perfil.</div>
+          <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--gris-medio);">💰 $100k presupuesto</div>
+        </div>
+
+        <div class="embudo-stage bofu">
+          <div class="stage-label">TESTING</div>
+          <div class="stage-title">Campaña 3</div>
+          <div class="stage-desc">Probar ángulos nuevos, audiencias emergentes.</div>
+          <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--gris-medio);">💰 $50k presupuesto</div>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">Ángulos Creativos (Ad Angles)</h3>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-header">💪 Ángulo 1: Fitness & Performance</div>
+          <div class="accordion-body">
+            <div class="accordion-body-content">
+              <p><strong>Audiencia:</strong> Personas que van al gym, corren, entrenan.</p>
+              <p style="margin-top: 8px;"><strong>Razón para cliquear:</strong> "Helado sin azúcar perfecto para después del entrenamiento"</p>
+              <p style="margin-top: 8px;"><strong>Copy:</strong> "Proteína deliciosa post-gym sin culpa"</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">🏥 Ángulo 2: Salud & Restricción Médica</div>
+          <div class="accordion-body">
+            <div class="accordion-body-content">
+              <p><strong>Audiencia:</strong> Diabéticos, personas con intolerancia al azúcar.</p>
+              <p style="margin-top: 8px;"><strong>Razón para cliquear:</strong> "Finalmente, un helado que puedo comer sin riesgo"</p>
+              <p style="margin-top: 8px;"><strong>Copy:</strong> "Soy diabético. Este helado me cambió la vida"</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">📸 Ángulo 3: Estilo de Vida & Estética</div>
+          <div class="accordion-body">
+            <div class="accordion-body-content">
+              <p><strong>Audiencia:</strong> Content creators, amantes del buen helado.</p>
+              <p style="margin-top: 8px;"><strong>Razón para cliquear:</strong> "Helado artesanal personalizado hecho con amor"</p>
+              <p style="margin-top: 8px;"><strong>Copy:</strong> "Helado capa a capa. Hecho a tu manera. Foto garantizada"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">Distribución de Presupuesto</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Campaña</th>
+              <th>Presupuesto</th>
+              <th>Objetivo</th>
+              <th>Audiencia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Awareness</strong></td>
+              <td>$100.000</td>
+              <td>Tráfico al perfil</td>
+              <td>Bucaramanga, fitness/salud</td>
+            </tr>
+            <tr>
+              <td><strong>2. Conversión</strong></td>
+              <td>$100.000</td>
+              <td>Visitas físicas</td>
+              <td>Retargeting (visitaron perfil)</td>
+            </tr>
+            <tr>
+              <td><strong>3. Testing</strong></td>
+              <td>$50.000</td>
+              <td>Exploración</td>
+              <td>3 audiencias diferentes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">Especificaciones de Copy (Meta Ads)</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Elemento</th>
+              <th>Límite</th>
+              <th>Ejemplo Capa a Capa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Primary Text</strong></td>
+              <td>125 chars visibles</td>
+              <td>"Helado sin azúcar perfecto para después de tu entrenamiento. Delicioso sin culpa. ¿Ya lo probaste?"</td>
+            </tr>
+            <tr>
+              <td><strong>Headline</strong></td>
+              <td>40 chars máximo</td>
+              <td>"Tu recompensa fit en Bucaramanga"</td>
+            </tr>
+            <tr>
+              <td><strong>Description</strong></td>
+              <td>30 chars máximo</td>
+              <td>"100% sin azúcar"</td>
+            </tr>
+            <tr>
+              <td><strong>CTA Button</strong></td>
+              <td>Predefinido</td>
+              <td>"Learn More" o "Get Directions"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: INTEGRACIÓN -->
+    <div id="integracion" class="tab-content hidden">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 24px; color: var(--gris-oscuro);">Cómo trabajan juntos</h3>
+
+      <div class="alert" style="background: var(--verde-palido); border-left-color: var(--verde);">
+        <strong>La magia:</strong> El orgánico genera audiencia y confianza. El pagado acelera la conversión. Sin orgánico, gastarías $3.000 CAC. Con orgánico de base, baja a $1.500 CAC.
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4>Semana 1-2: Lanzamiento Paralelo</h4>
+          <p>Lanzas pauta (Awareness) MIENTRAS aceleras contenido orgánico. La pauta te da datos rápidos; el orgánico construye relación.</p>
+        </div>
+
+        <div class="card">
+          <h4>Semana 3-4: Optimización Data-Driven</h4>
+          <p>Con datos reales, optimizas pauta. Aumentas frecuencia de contenido orgánico de alto rendimiento. Pausas lo que no funciona.</p>
+        </div>
+
+        <div class="card">
+          <h4>Mes 2+: Escala Inteligente</h4>
+          <p>Si el orgánico está ganando tracción, aumentas presupuesto de pauta. Si la pauta muestra ROI positivo, la mantienes activa.</p>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">Matriz de Inversión Tiempo (Mensual)</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Actividad</th>
+              <th>Tiempo/semana</th>
+              <th>Responsable</th>
+              <th>Costo/Impacto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Contenido orgánico (batching + historias)</strong></td>
+              <td>2-3 horas</td>
+              <td>Community Manager</td>
+              <td>Gratuito / Alto impacto</td>
+            </tr>
+            <tr>
+              <td><strong>Engagement diario (30 min)</strong></td>
+              <td>30 min x 5 días</td>
+              <td>Community Manager</td>
+              <td>Gratuito / Medio impacto</td>
+            </tr>
+            <tr>
+              <td><strong>Gestión de pauta ADS</strong></td>
+              <td>1-2 horas</td>
+              <td>JF Solution</td>
+              <td>$500k/mes / Muy alto impacto</td>
+            </tr>
+            <tr>
+              <td><strong>Análisis e informes</strong></td>
+              <td>1 hora</td>
+              <td>JF Solution</td>
+              <td>Incluido / Alto impacto</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; margin: 40px 0 24px; color: var(--gris-oscuro);">KPIs Integrados por Etapa</h3>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4>TOFU — Awareness</h4>
+          <ul class="checklist">
+            <li><strong>Orgánico:</strong> Alcance, seguidores nuevos, views</li>
+            <li><strong>Pagado:</strong> Impressions, CTR, CPM</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>MOFU — Consideración</h4>
+          <ul class="checklist">
+            <li><strong>Orgánico:</strong> Engagement rate, saves, shares, comentarios</li>
+            <li><strong>Pagado:</strong> CPC, retargeting conversions</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h4>BOFU — Conversión</h4>
+          <ul class="checklist">
+            <li><strong>Orgánico:</strong> DMs, clics a WhatsApp, visitas al local</li>
+            <li><strong>Pagado:</strong> CPA, ROAS, helados vendidos</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert" style="background: var(--amarillo-claro); border-left-color: var(--amarillo); margin-top: 30px;">
+        <strong>Métrica crítica:</strong> "Helados vendidos que mencionaron ver el anuncio/publicación". Esto es el ROAS real, no solo DMs. Establece un sistema manual (el cliente pregunta "¿de dónde nos conoces?") o QR en el local.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRÓXIMOS PASOS -->
+<section>
+  <div class="container">
+    <p class="section-label">Implementación</p>
+    <h2 class="section-title">Próximos 30 días — Roadmap</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-tag">Semana 1</span>
+        <h4>Preparación</h4>
+        <ul class="checklist">
+          <li>Acceso a Meta Ads Manager</li>
+          <li>Preparar 6-8 creativos (1080x1080px)</li>
+          <li>Custom Audience para retargeting</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="card-tag">Semana 2</span>
+        <h4>Lanzamiento Dual</h4>
+        <ul class="checklist">
+          <li>Campaña 1 (Awareness) — LIVE</li>
+          <li>Campaña 2 (Conversión) — LIVE</li>
+          <li>Contenido orgánico acelerado</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="card-tag">Semana 3-4</span>
+        <h4>Optimización</h4>
+        <ul class="checklist">
+          <li>Analizar datos cada 3-4 días</li>
+          <li>Pausar creativos underperformers</li>
+          <li>Aumentar presupuesto en ganadores</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="card-tag">Mensual</span>
+        <h4>Revisión + Ajustes</h4>
+        <ul class="checklist">
+          <li>Reunión de métricas</li>
+          <li>Actualizar estrategia basado en datos</li>
+          <li>Definir optimizaciones mes 2</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Embudos Completos Capa a Capa</strong> — Orgánico + ADS $250k/mes</p>
+  <p style="margin-top: 8px; opacity: 0.7;">Basado en: content-strategy, social-content, ad-creative</p>
+  <p style="margin-top: 8px; font-size: 12px; opacity: 0.6;">JF Solution | Abril 2026</p>
+</footer>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    });
+  });
+
+  // Accordion functionality
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.parentElement;
+      item.classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>
