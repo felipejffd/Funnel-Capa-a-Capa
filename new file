@@ -1,9 +1,0 @@
-server.js
-package.json
-.env.example
-.gitignore
-src/meta.js
-src/routes/campaigns.js
-src/routes/ads.js
-src/routes/metrics.js
-src/routes/audiences.js
